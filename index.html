@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela da Copa Dinâmica</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4a148c; /* Cor temática */
+        }
+
+        .controles {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        label {
+            margin-right: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        th {
+            background-color: #4a148c;
+            color: white;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
+        /* Classe para o modo Apagar */
+        .celula-apagada {
+            background-color: #ffffff !important;
+            color: transparent !important;
+        }
+
+        /* Classe para o modo Restaurar */
+        .celula-restaurada {
+            background-color: #e0f7fa !important;
+            color: #006064 !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 Tabela da Copa</h1>
+
+    <div class="controles">
+        <label>
+            <input type="radio" name="modo" value="apagar" checked> ⚪ Apagar Célula
+        </label>
+        <label>
+            <input type="radio" name="modo" value="restaurar"> 🔄 Restaurar (Mostrar Número)
+        </label>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Grupo A</th>
+                <th>Pts</th>
+                <th>PJ</th>
+                <th>VIT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Brasil</td>
+                <td>9</td>
+                <td>3</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>França</td>
+                <td>6</td>
+                <td>3</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Japão</td>
+                <td>3</td>
+                <td>3</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Gana</td>
+                <td>0</td>
+                <td>3</td>
+                <td>0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Mapeia todas as células da tabela (tanto th quanto td)
+        const celulas = document.querySelectorAll('th, td');
+
+        // Adiciona um identificador (número) e o texto original em cada célula
+        celulas.forEach((celula, index) => {
+            // Guardamos o texto original para caso queira voltar ao normal depois
+            celula.dataset.textoOriginal = celula.innerText;
+            celula.dataset.numeroCelular = index + 1;
+
+            // Adiciona o evento de clique em cada uma
+            celula.addEventListener('click', function() {
+                // Verifica qual opção do rádio está selecionada
+                const modoSelecionado = document.querySelector('input[name="modo"]:checked').value;
+
+                if (modoSelecionado === 'apagar') {
+                    // Remove efeitos de restauração, limpa o texto e aplica o fundo branco
+                    this.classList.remove('celula-restaurada');
+                    this.classList.add('celula-apagada');
+                    this.innerText = ""; 
+                } else if (modoSelecionado === 'restaurar') {
+                    // Remove efeitos de apagado, aplica o estilo de restauração e mostra o número
+                    this.classList.remove('celula-apagada');
+                    this.classList.add('celula-restaurada');
+                    this.innerText = `Célula ${this.dataset.numeroCelular}`;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

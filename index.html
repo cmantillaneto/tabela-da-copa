@@ -3,70 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabela da Copa Dinâmica</title>
+    <title>Tabela da Copa do Mundo</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            margin: 0;
         }
 
         h1 {
-            color: #4a148c; /* Cor temática */
+            color: #1a237e;
+            margin-bottom: 10px;
         }
 
         .controles {
-            margin-bottom: 20px;
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            background: #ffffff;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         label {
-            margin-right: 15px;
-            font-weight: bold;
+            font-weight: 600;
+            color: #444;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="radio"] {
+            transform: scale(1.2);
             cursor: pointer;
         }
 
-        table {
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .btn-reset {
+            background-color: #ff3d00;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: #dd2c00;
+        }
+
+        .tabela-container {
+            width: 100%;
+            max-width: 1000px;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-radius: 8px;
-            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            text-align: center;
         }
 
         th, td {
-            border: 1px solid #ddd;
-            padding: 12px 20px;
-            text-align: center;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+            padding: 10px 14px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         th {
-            background-color: #4a148c;
+            background-color: #1a237e;
             color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
         }
 
-        tr:nth-child(even) td {
-            background-color: #f9f9f9;
+        /* Cores alternadas para destacar as linhas da planilha */
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
 
-        /* Classe para o modo Apagar */
+        tbody tr:hover {
+            background-color: #f1f3f9;
+        }
+
+        /* Classes de estado para a dinâmica pedida */
         .celula-apagada {
             background-color: #ffffff !important;
             color: transparent !important;
         }
 
-        /* Classe para o modo Restaurar */
         .celula-restaurada {
-            background-color: #e0f7fa !important;
-            color: #006064 !important;
+            background-color: #e8f5e9 !important;
+            color: #2e7d32 !important;
             font-weight: bold;
         }
     </style>
@@ -77,78 +119,108 @@
 
     <div class="controles">
         <label>
-            <input type="radio" name="modo" value="apagar" checked> ⚪ Apagar Célula
+            <input type="radio" name="modo" value="apagar" checked> ⚪ Apagar
         </label>
         <label>
-            <input type="radio" name="modo" value="restaurar"> 🔄 Restaurar (Mostrar Número)
+            <input type="radio" name="modo" value="restaurar"> 🔄 Restaurar
         </label>
+        <button class="btn-reset" onclick="limparHistorico()">🧹 Resetar Tudo</button>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Grupo A</th>
-                <th>Pts</th>
-                <th>PJ</th>
-                <th>VIT</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Brasil</td>
-                <td>9</td>
-                <td>3</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>França</td>
-                <td>6</td>
-                <td>3</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>Japão</td>
-                <td>3</td>
-                <td>3</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Gana</td>
-                <td>0</td>
-                <td>3</td>
-                <td>0</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="tabela-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Grupo</th>
+                    <th>Seleções</th>
+                    <th>Pts</th>
+                    <th>J</th>
+                    <th>V</th>
+                    <th>E</th>
+                    <th>D</th>
+                    <th>GP</th>
+                    <th>GC</th>
+                    <th>SG</th>
+                    <th>%</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Grupo A</td><td>Catar</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo A</td><td>Equador</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo A</td><td>Senegal</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo A</td><td>Holanda</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo B</td><td>Inglaterra</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo B</td><td>Irã</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo B</td><td>EUA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+                <tr><td>Grupo B</td><td>Gales</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td></tr>
+            </tbody>
+        </table>
+    </div>
 
     <script>
-        // Mapeia todas as células da tabela (tanto th quanto td)
         const celulas = document.querySelectorAll('th, td');
 
-        // Adiciona um identificador (número) e o texto original em cada célula
+        // Salva os estados atuais de forma persistente
+        function salvarDados() {
+            const estadoTabela = [];
+            celulas.forEach((celula, index) => {
+                estadoTabela.push({
+                    index: index,
+                    textoAtual: celula.innerText,
+                    classeApagada: celula.classList.contains('celula-apagada'),
+                    classeRestaurada: celula.classList.contains('celula-restaurada')
+                });
+            });
+            localStorage.setItem('dadosPlanilhaCopa', JSON.stringify(estadoTabela));
+        }
+
+        // Puxa as edições salvas da memória
+        function carregarDados() {
+            const dadosSalvos = localStorage.getItem('dadosPlanilhaCopa');
+            if (dadosSalvos) {
+                const estadoTabela = JSON.parse(dadosSalvos);
+                estadoTabela.forEach(item => {
+                    const celula = celulas[item.index];
+                    if (item.classeApagada) {
+                        celula.classList.add('celula-apagada');
+                        celula.innerText = "";
+                    } else if (item.classeRestaurada) {
+                        celula.classList.add('celula-restaurada');
+                        celula.innerText = item.textoAtual;
+                    }
+                });
+            }
+        }
+
+        // Configuração inicial das ações nas células
         celulas.forEach((celula, index) => {
-            // Guardamos o texto original para caso queira voltar ao normal depois
             celula.dataset.textoOriginal = celula.innerText;
             celula.dataset.numeroCelular = index + 1;
 
-            // Adiciona o evento de clique em cada uma
             celula.addEventListener('click', function() {
-                // Verifica qual opção do rádio está selecionada
                 const modoSelecionado = document.querySelector('input[name="modo"]:checked').value;
 
                 if (modoSelecionado === 'apagar') {
-                    // Remove efeitos de restauração, limpa o texto e aplica o fundo branco
                     this.classList.remove('celula-restaurada');
                     this.classList.add('celula-apagada');
                     this.innerText = ""; 
                 } else if (modoSelecionado === 'restaurar') {
-                    // Remove efeitos de apagado, aplica o estilo de restauração e mostra o número
                     this.classList.remove('celula-apagada');
                     this.classList.add('celula-restaurada');
-                    this.innerText = `Célula ${this.dataset.numeroCelular}`;
+                    this.innerText = `${this.dataset.numeroCelular}`;
                 }
+                salvarDados();
             });
         });
+
+        function limparHistorico() {
+            if (confirm("Quer mesmo resetar todas as edições feitas na planilha?")) {
+                localStorage.removeItem('dadosPlanilhaCopa');
+                window.location.reload();
+            }
+        }
+
+        carregarDados();
     </script>
 
 </body>
